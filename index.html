@@ -1,1 +1,65 @@
-# siestabreaker
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이머 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>마우스 움직임 감지 프로그램</h1>
+    <button id="startButton">시작</button>
+    <p id="status">타이머가 대기 중입니다.</p>
+
+    <!-- 소리 파일 -->
+    <audio id="alarmSound" src="alarm.mp3" preload="auto"></audio>
+
+    <script>
+        // 타이머 변수
+        let inactivityTimer;
+        const idleTimeLimit = 30000; // 30초
+
+        const startButton = document.getElementById('startButton');
+        const statusText = document.getElementById('status');
+        const alarmSound = document.getElementById('alarmSound');
+
+        // 타이머 리셋 함수
+        function resetTimer() {
+            clearTimeout(inactivityTimer);  // 기존 타이머 제거
+            statusText.textContent = "마우스가 움직였습니다. 타이머가 다시 시작됩니다.";
+            inactivityTimer = setTimeout(triggerAlarm, idleTimeLimit); // 타이머 새로 시작
+        }
+
+        // 타이머 시작 함수
+        function startTimer() {
+            statusText.textContent = "타이머가 시작되었습니다. 마우스를 움직이세요!";
+            resetTimer();  // 타이머 리셋 및 시작
+            document.addEventListener('mousemove', resetTimer); // 마우스 움직임 감지
+        }
+
+        // 경고 소리 재생 함수
+        function triggerAlarm() {
+            statusText.textContent = "30초간 마우스가 움직이지 않았습니다. 소리가 재생됩니다!";
+            alarmSound.play();  // 소리 재생
+        }
+
+        // '시작' 버튼 클릭 시 타이머 시작
+        startButton.addEventListener('click', () => {
+            startTimer();
+        });
+    </script>
+
+</body>
+</html>
